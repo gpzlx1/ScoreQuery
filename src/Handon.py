@@ -1,30 +1,93 @@
+import re
+import urllib
+import requests
+import xlrd
+
 from flask import Flask, session, redirect, url_for, escape, request
 
 app = Flask(__name__)
 
-# Set the secret key to some random bytes. Keep this really secret!
-app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
+def get_file(file_url):
+    try:
+        data = xlrd.open_workbook(file_url)
+        return data
+    except:
+        return redirect(url_for("error", msg='服务不可达'))
+
+def get_sheet(data):
+    table = data.sheet_by_name('Sheet0')
+    total_rows = table.nrows
+    colums = table.row_values(5)
+    excel_list = {}
+    for one_row in range(6, total_rows):
+        row = table.row_values(one_row)
+        if row:
+            row_object = {}
+            id = row[1]
+            for i in range(2, len(colums)):
+                key = colums[i]
+                row_object[key] = row[i]
+
+            excel_list[id] = row_object
+
+    return colums, excel_list
+
+
+@app.route('/score/<id>')
+def score(id):
+    data = get_file('src/data/2019秋 011151.01成绩考核登记表_2019-9-5.xlsx')
+    colums, excel_list = get_sheet(data)
+    print(colums)
+    try:
+        score = excel_list[id]
+        return str(score)
+    except:
+        return redirect(url_for('error',msg = '查无此人'))
+
+
+
 
 @app.route('/')
-def index():
-    if 'username' in session:
-        return 'Logged in as %s' % escape(session['username'])
-    return 'You are not logged in'
+def hello():
+    return "中科大模拟与数字电路平时分查询系统（张老师班)"
 
-@app.route('/login', methods=['GET', 'POST'])
+@app.route('/error/<msg>')
+def error(msg):
+    return msg
+
+@app.route('/login')
 def login():
-    if request.method == 'POST':
-        session['username'] = request.form['username']
-        return redirect(url_for('index'))
-    return '''
-        <form method="post">
-            <p><input type=text name=username>
-            <p><input type=submit value=Login>
-        </form>
-    '''
+    """redirect to login page"""
+    return redirect("http://home.ustc.edu.cn/~gpzlx1/cas")
 
-@app.route('/logout')
-def logout():
-    # remove the username from the session if it's there
-    session.pop('username', None)
-    return redirect(url_for('index'))
+
+@app.route('/login/cas/<ticket>', methods=['GET', 'POST'])
+def login_cas(ticket):
+    """Check user"""
+    if len(ticket) != 35:
+        return redirect(url_for('login'))
+
+    pattern = re.compile(r'^ST-\w{32}$')
+    if pattern.match(ticket) is None:
+        return redirect(url_for('login'))
+    # use ticket
+    info = None
+    API_URL = "https://passport.ustc.edu.cn/serviceValidate?ticket={ticket}&service={service}"
+    service_url = urllib.parse.quote_plus(
+        "home.ustc.edu.cn/~gpzlx1/cas/index.html")
+    api_url = API_URL.format(ticket=ticket, service=service_url)
+    try:
+        r = requests.get(api_url)
+        info = r.text
+    except:
+        return redirect(url_for('login'))
+
+    # format return info
+    if info:
+        id = re.search(r'[a-zA-Z]{2}\d{8}', info, flags=0)
+        if id:
+            return redirect(url_for('score',id = id.group(0)))
+        else:
+            return redirect(url_for('login'))
+    else:
+        return redirect(url_for('login'))
