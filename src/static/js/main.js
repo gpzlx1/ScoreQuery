@@ -20,7 +20,7 @@ $(document).ready(function () {
                 loadAnim(false);
                 data = msg; // FIXME: give it to outter var??
                 data_ready = true;
-                if (typeof(msg["status"]) != "undefined") {
+                if (msg["status"]) {
                     // showScore(msg);
                     $(".header h1").text("Hi, " + msg["姓名"]);
                 }
@@ -113,7 +113,7 @@ function showScore(msg) {
     $('.modal-title').text(msg["姓名"] + "同学的成绩");
     for (var i = 0; i < 10; i++) {
         var item_key = $('#score tbody tr:eq(' + i + ') td:eq(0)').text();
-        if (msg[item_key]) {
+        if (typeof(msg[item_key]) != "undefined") {
             $('#score tbody tr:eq(' + i + ') td:eq(1)').text(msg[item_key]);
         }
     }
