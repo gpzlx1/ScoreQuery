@@ -10,7 +10,7 @@ $(document).ready(function () {
     id = getURLParameter('id');
     if (id) {
         $(".login span").text("CHECK SCORE");
-        ajaxURL = "http://222.195.67.237:5000/score/" + id
+        ajaxURL = "http://202.38.73.8:80/score/" + id
         loadAnim(true);
         $.ajax({
             url: ajaxURL,
@@ -20,7 +20,7 @@ $(document).ready(function () {
                 loadAnim(false);
                 data = msg; // FIXME: give it to outter var??
                 data_ready = true;
-                if (msg["status"]) {
+                if (typeof(msg["status"]) != "undefined") {
                     // showScore(msg);
                     $(".header h1").text("Hi, " + msg["姓名"]);
                 }
@@ -65,7 +65,7 @@ $(".login").on("click", function () {
 });
 
 var serviceURL = "http://home.ustc.edu.cn/~gpzlx1/cas/index.html";
-var apiURL = "http://222.195.67.237:5000/login/cas/{0}";
+var apiURL = "http://202.38.73.8:80/login/cas/{0}";
 var casURL = "https://passport.ustc.edu.cn/login?service={0}";
 
 function getURLParameter(name) {
@@ -82,7 +82,7 @@ String.prototype.URLFormat = function(){
 function getScore(id) {
     if (id) {
         loadAnim(true);
-        ajaxURL = "http://222.195.67.237:5000/score/" + id
+        ajaxURL = "http://202.38.73.8:80/score/" + id
         $.ajax({
             url: ajaxURL,
             timeout: 5000, // TODO: set proper timeout
@@ -123,7 +123,7 @@ function showScore(msg) {
 function showError(title, msg) {
     $(".toast .toast-header strong").text(title);
 //    $(".toast .toast-body").text(msg);
-    $(".toast .toast-body").html(msg + '<a href="http://222.195.67.237:5000">重新登录</a>');
+    $(".toast .toast-body").html(msg + '<a href="http://202.38.73.8:80">重新登录</a>');
     $(".toast").toast('show');
     setTitle("Error!");
 }
