@@ -100,3 +100,6 @@ def login_cas(ticket):
             return redirect(url_for('login'))
     else:
         return redirect(url_for('login'))
+
+if __name__ == '__main__':
+    app.run(port='80', debug=False)
