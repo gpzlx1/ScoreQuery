@@ -1,11 +1,12 @@
+import math
 import re
 import urllib
 import requests
 import xlrd
 
-from flask import Flask, session, redirect, url_for, escape, request
+from flask import Flask, session, redirect, url_for, escape, request, render_template, jsonify, make_response, json
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='static')
 
 def get_file(file_url):
     try:
@@ -24,6 +25,7 @@ def get_sheet(data):
         if row:
             row_object = {}
             id = row[1]
+            id = abs(hash(id))
             for i in range(2, len(colums)):
                 key = colums[i]
                 row_object[key] = row[i]
@@ -32,24 +34,30 @@ def get_sheet(data):
 
     return colums, excel_list
 
+'''open excel'''
+data = get_file('src/data/2019秋 011151.01成绩考核登记表_2019-9-5.xlsx')
+colums, excel_list = get_sheet(data)
 
 @app.route('/score/<id>')
 def score(id):
-    data = get_file('src/data/2019秋 011151.01成绩考核登记表_2019-9-5.xlsx')
-    colums, excel_list = get_sheet(data)
-    print(colums)
+    id = int(id)
     try:
-        score = excel_list[id]
-        return str(score)
+        ret = excel_list[id]
+        ret['status'] = True
+        return jsonify(ret)
     except:
-        return redirect(url_for('error',msg = '查无此人'))
+        ret = {}
+        ret['status'] = False
+        ret['msg'] ='您尚未登录或者不是张老师课程修读者'
+        return jsonify(ret)
 
 
 
 
 @app.route('/')
 def hello():
-    return "中科大模拟与数字电路平时分查询系统（张老师班)"
+    #return "中科大模拟与数字电路平时分查询系统（张老师班)"
+    return make_response(render_template('index.html', page='index.html'))
 
 @app.route('/error/<msg>')
 def error(msg):
@@ -86,7 +94,8 @@ def login_cas(ticket):
     if info:
         id = re.search(r'[a-zA-Z]{2}\d{8}', info, flags=0)
         if id:
-            return redirect(url_for('score',id = id.group(0)))
+            id = id.group(0)
+            return redirect(url_for('hello',id = abs(hash(id))))
         else:
             return redirect(url_for('login'))
     else:

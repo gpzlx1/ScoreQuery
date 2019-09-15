@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>模拟与数字电路 分数查询系统</title>
+    <link href="https://cdn.bootcss.com/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <link href="static/css/main.css" rel="stylesheet" />
+    <link href="css/main.css" rel="stylesheet" />
+</head>
+
+<body>
+    <!-- Header -->
+    <div class='header'>
+        <h1>Welcome here!</h1>
+        <hr/>
+        <h3>模拟与数字电路 平时分查询系统</h3>
+        <h4>张俊霞班</h4>
+        <button class='login'>
+            <span>LOGIN</span>
+            <div class="spinner-border spinner-border-sm" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </button>
+        <!-- <button class='test'>TEST</button> -->
+    </div>
+    <div class='version'>Version 1.0</div>
+
+    <!-- Score -->
+    <div id="score" class="modal" tabindex="-1" role="dialog" >
+        <div class="modal-dialog modal-dialog-scrollable" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalCenteredLabel">-</h5>
+                    <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                        <th>序号</th>
+                        <th>项目</th>
+                        <th>成绩</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th scope="row">1</th>
+                            <td>第一周作业</td>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">2</th>
+                            <td>第二周作业</td>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">3</th>
+                            <td>第三周作业</td>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">4</th>
+                            <td>第四周作业</td>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">5</th>
+                            <td>第五周作业</td>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">6</th>
+                            <td>第六周作业</td>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">7</th>
+                            <td>考查成绩</td>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">8</th>
+                            <td>考试成绩</td>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">9</th>
+                            <td>学期总成绩</td>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">备注</th>
+                            <td>......</td>
+                        </tr>
+                        
+                    </tbody>
+                </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Error -->
+    <div class="toast" role="alert" data-autohide="false">
+        <div class="toast-header">
+            <strong class="mr-auto">Error</strong>
+            <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="toast-body">
+            #
+        </div>
+    </div>
+
+    <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="static/js/main.js"></script>
+    <script src="js/main.js"></script>
+
+</body>
+</html>
